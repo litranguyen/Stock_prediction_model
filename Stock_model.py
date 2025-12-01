@@ -12,7 +12,8 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns 
 
 #taking Apple stock to predict up or down direction of stock
-df = yf.download("AAPL", start="2018-01-01", threads=False)
+df = yf.download("IBM", start="2018-01-01", threads=False)
+
 df = df.dropna()
 df.head()
 
@@ -51,10 +52,10 @@ X = df[features]
 y = df['target']
 
 # Train / test split
-X_train = X.iloc[:-200]
-X_test = X.iloc[-200:]
-y_train = y.iloc[:-200]
-y_test = y.iloc[-200:]
+X_train = X.iloc[:-300]
+X_test = X.iloc[-300:]
+y_train = y.iloc[:-300]
+y_test = y.iloc[-300:]
 
 model = RandomForestClassifier(n_estimators=300, max_depth=5, random_state=42)
 model.fit(X_train, y_train)
@@ -64,7 +65,7 @@ print('Accuracy:', accuracy_score(y_test, preds))
 print(classification_report(y_test, preds))
 
 # Simple strategy backtest: go long when model predicts "up"
-df_test = df.iloc[-200:].copy()
+df_test = df.iloc[-300:].copy()
 df_test['pred'] = preds
 df_test['actual'] = y_test.values
 df_test['strategy_return'] = df_test['pred'] * df_test['return']
